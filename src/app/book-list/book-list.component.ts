@@ -9,10 +9,10 @@ import { BookStoreService } from '../shared/book-store.service';
 export class BookListComponent implements OnInit {
   books: Book[];
 
-  constructor(private bs: BookStoreService){ }
+  constructor(private bs: BookStoreService) { }
 
   ngOnInit() {
-    this.books = this.bs.getAll()
+    this.books = this.bs.getAll();
   }
 
 }

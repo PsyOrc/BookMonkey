@@ -22,7 +22,10 @@ export class BookDetailComponent implements OnInit {
 
   ngOnInit() {
     const params = this.route.snapshot.params;
-    this.book = this.bookStoreService.getSingle(params['isbn']);
+    this.book = this.bookStoreService.getSingle(params[this.getIsbn()]);
   }
 
+  private getIsbn() {
+    return 'isbn';
+  }
 }
