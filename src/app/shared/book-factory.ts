@@ -6,7 +6,7 @@ export class BookFactory {
     static empty(): Book {
       return new Book('', '', [''], new Date(), '', 0, [{url: '', title: ''}], '');
     }
-  
+
     static fromObject(rawBook: BookRaw | any): Book {
       return new Book(
         rawBook.isbn,
