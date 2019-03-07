@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 
 import { Book } from '../shared/book';
 import { BookStoreService } from '../shared/book-store.service';
@@ -14,13 +14,18 @@ export class SearchComponent implements OnInit {
   // unser Ziel
   @Output() bookSelected = new EventEmitter<Book>();
 
-  keyup = new EventEmitter<string>();
+  isLoading = false;
   foundBooks: Book[] = [];
+  keyup = new EventEmitter<string>();
   constructor(private bookStoreService: BookStoreService) { }
 
   ngOnInit() {
     this.keyup
-    .pipe(debounceTime(500), distinctUntilChanged(), switchMap(searchTerm => this.bookStoreService.getAllSearch(searchTerm)))
+    .pipe(debounceTime(500)
+      , distinctUntilChanged()
+      , tap(() => this.isLoading = true)
+      , switchMap(searchTerm => this.bookStoreService.getAllSearch(searchTerm))
+      , tap(() => this.isLoading = false))
     .subscribe(books => this.foundBooks = books);
   }
 
