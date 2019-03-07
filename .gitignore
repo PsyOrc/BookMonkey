@@ -9,7 +9,7 @@
 
 # dependencies
 /node_modules/*
-!node_modules/semantic-ui-css/*
+!node_modules/semantic-ui-css
 
 # profiling files
 chrome-profiler-events.json
