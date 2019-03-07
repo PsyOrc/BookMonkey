@@ -1,4 +1,4 @@
-export class Thrumbnail {
+export class Thumbnail {
     constructor(
         public url: string,
         public title: string

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, retry } from 'rxjs/operators';
 import { Book } from './book';
 import { BookFactory } from './book-factory';
 import { BookRaw } from './book-raw';
@@ -16,6 +16,7 @@ export class BookStoreService {
     return this.http
       .get<BookRaw[]>(`${this.api}/books`)
       .pipe(
+        retry(3),
         map(rawBooks => rawBooks
           .map(rawBook => BookFactory.fromObject(rawBook)),
         ),
@@ -27,6 +28,7 @@ export class BookStoreService {
     return this.http
       .get<BookRaw>(`${this.api}/book/${isbn}`)
       .pipe(
+        retry(3),
         map(rawBook => BookFactory.fromObject(rawBook)),
         catchError(this.errorHandler)
       );
@@ -65,6 +67,7 @@ export class BookStoreService {
     return this.http
       .get<BookRaw[]>(`${this.api}/books/search/${searchTerm}`)
       .pipe(
+        retry(3),
         map(rawBooks => rawBooks
           .map(rawBook => BookFactory.fromObject(rawBook)),
         ),

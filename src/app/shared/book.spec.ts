@@ -1,5 +1,5 @@
 import { Book } from './book';
-import { Thrumbnail } from '../shared/thrumbnail';
+import { Thumbnail } from '../shared/thumbnail';
 
 describe('Book', () => {
   it('should create an instance', () => {
@@ -10,7 +10,7 @@ describe('Book', () => {
       new Date(2107,3,1),
       'Grundlagen und weiteres Blabla für Angular',
       5,
-      [new Thrumbnail('https://ng-buch.de/cover2.jpg', 'Buchcover')],
+      [new Thumbnail('https://ng-buch.de/cover2.jpg', 'Buchcover')],
       'weiterer extra text blabla...'
     ), ).toBeTruthy();
   });

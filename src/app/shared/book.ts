@@ -1,5 +1,4 @@
-import { Thrumbnail } from './thrumbnail';
-export { Thrumbnail } from './thrumbnail';
+import { Thumbnail } from './thumbnail';
 
 
 export class Book {
@@ -10,7 +9,7 @@ export class Book {
         public published: Date,
         public subtitle?: string,
         public rating?: number,
-        public thrumbnails?: Thrumbnail[],
+        public thumbnails?: Thumbnail[],
         public description?: string
     ) {}
 }
