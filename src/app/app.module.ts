@@ -8,6 +8,8 @@ import { BookDetailComponent } from './book-detail/book-detail.component';
 import { BookStoreService } from './shared/book-store.service';
 import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app.routing.module';
+import { HttpClientModule } from "@angular/common/http";
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -15,11 +17,13 @@ import { AppRoutingModule } from './app.routing.module';
     BookListComponent,
     BookListItemComponent,
     BookDetailComponent,
-    HomeComponent
+    HomeComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule 
   ],
   providers: [
     BookStoreService

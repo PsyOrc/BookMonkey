@@ -1,42 +1,61 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Book, Thrumbnail } from './book';
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Book } from './book';
+import { BookFactory } from './book-factory';
 
-@Injectable({
-  providedIn: 'root'
-})
+
+@Injectable()
 export class BookStoreService {
-  books: Book[];
+  private api = 'https://book-monkey2-api.angular-buch.com';
+  private headers: HttpHeaders = new HttpHeaders();
 
-  constructor() {
-    this.books = [
-      new Book(
-        '9783864903571',
-        'Angular',
-        ['Johannes Hoppe', 'Danny Koppenhagen', 'Ferdinand Malcher', 'Gregor Woiwode'],
-        new Date(2017, 3, 1),
-        'Grundlagen, fortgeschrittene Techniken und Best Practices mit TypeScript - ab Angular 4, inklusive NativeScript und Redux',
-        5,
-        [new Thrumbnail('https://ng-buch.de/cover2.jpg', 'Buchcover')],
-        'Mit Angular setzen Sie auf ein modernes und modulares...'
-      ),
-      new Book(
-        '9783864901546',
-        'AngularJS',
-        ['Philipp Tarasiewicz', 'Robin Böhm'],
-        new Date(2014, 5, 29),
-        'Eine praktische Einführung',
-        5,
-        [new Thrumbnail('https://ng-buch.de/cover1.jpg', 'Buchcover')],
-        'Dieses Buch führt Sie anhand eines zusammenhängenden Beispielprojekts...'
-      )
-    ];
+
+  constructor(private http: HttpClient) {
+    this.headers.append('Content-Type', 'application/json');
   }
 
-  getAll() {
-    return this.books;
+  private errorHandler(error: Error | any): Observable<any> {
+    return Observable.throw(error);
   }
 
-  getSingle(isbn) {
-    return this.books.find(book => book.isbn === isbn);
+  getAll(): Observable<Array<Book>> {
+    return this.http
+      .get(`${this.api}/books`)
+      .pipe(map(rawBooks => rawBooks), map(rawBook => BookFactory.formObject(rawBook))
+      )      
+      .pipe(catchError(this.errorHandler))
+  }
+
+  getSingle(isbn: string): Observable<Book> {
+    return this.http
+      .get(`${this.api}/book/${isbn}`)
+      .pipe(map(rawBooks => rawBooks), map(rawBook => BookFactory.formObject(rawBook))
+      )      
+      .pipe(catchError(this.errorHandler))
+  }
+
+  create(book: Book): Observable<any> {
+    return this.http
+      .post(`${this.api}/book`, JSON.stringify(book), {headers: this.headers}).pipe(catchError(this.errorHandler))
+  }
+
+  update(book: Book): Observable<any> {
+    return this.http
+      .put(`${this.api}/book/${book.isbn}`,JSON.stringify(book), {headers: this.headers}).pipe(catchError(this.errorHandler))
+  }
+
+  remove(isbn: string): Observable<any> {
+    return this.http
+      .delete(`${this.api}/book/${isbn}`).pipe(catchError(this.errorHandler))
+  }
+
+  getAllSearch(searchTerm: string): Observable<Array<Book>> {
+    return this.http
+      .get(`${this.api}/books/search/${searchTerm}`)
+      .pipe(map(rawBooks => rawBooks), map(rawBook => BookFactory.formObject(rawBook))
+      )      
+      .pipe(catchError(this.errorHandler))
   }
 }
